@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maplewood Transit — Live Bus Tracker</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Header ────────────────────────────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="brand-icon" aria-hidden="true">B</div>
+      <div>
+        <h1 class="brand-title">Maplewood Transit</h1>
+        <p class="brand-sub">Real-Time Bus Tracker &mdash; Demo</p>
+      </div>
+    </div>
+    <div class="header-status">
+      <div id="connection-badge" class="conn-badge conn-connecting">
+        <span class="conn-dot" id="conn-dot"></span>
+        <span id="conn-text">Connecting</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Offline banner (shown when socket disconnects) ────────────────────── -->
+  <div id="offline-banner" class="offline-banner hidden">
+    Connection lost &mdash; attempting to reconnect&hellip;
+  </div>
+
+  <!-- ── Main layout ────────────────────────────────────────────────────────── -->
+  <div class="layout">
+
+    <!-- Map -->
+    <div class="map-wrap">
+      <div id="map"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div>
+          <h2 class="sidebar-title">Live Buses</h2>
+          <p class="sidebar-hint">Updates every 3 s</p>
+        </div>
+        <span class="active-count" id="active-count">0 active</span>
+      </div>
+
+      <!-- Route legend -->
+      <div class="route-legend">
+        <span class="legend-dot" style="background:#2563eb;"></span> Route A
+        &nbsp;&nbsp;
+        <span class="legend-dot" style="background:#0d9488;"></span> Route B
+      </div>
+
+      <!-- Bus cards rendered by JS -->
+      <div id="bus-list"></div>
+
+      <!-- Reference stop note -->
+      <p class="eta-note">ETA calculated to Maplewood Railway Station at 25 km/h.</p>
+    </aside>
+
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

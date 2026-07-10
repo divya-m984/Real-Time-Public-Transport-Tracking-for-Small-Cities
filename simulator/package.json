@@ -1,0 +1,12 @@
+{
+  "name": "bus-simulator",
+  "version": "1.0.0",
+  "description": "Simulates bus movements for the tracking app.",
+  "main": "simulator.js",
+  "scripts": {
+    "start": "node simulator.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

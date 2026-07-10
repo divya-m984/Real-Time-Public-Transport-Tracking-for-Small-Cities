@@ -7,18 +7,17 @@
 
 /* ── Base ───────────────────────────────────────────────────────────────────── */
 :root {
-  --bg:        #0f172a;
-  --surface:   #1e293b;
-  --border:    rgba(255,255,255,0.08);
-  --text:      #e2e8f0;
-  --muted:     #94a3b8;
-  --blue:      #2563eb;
-  --teal:      #0d9488;
-  --green:     #22c55e;
-  --red:       #ef4444;
-  --amber:     #f59e0b;
-  --radius:    14px;
-  --shadow:    0 4px 24px rgba(0,0,0,0.35);
+  --bg:      #0f172a;
+  --surface: #1e293b;
+  --border:  rgba(255,255,255,0.08);
+  --text:    #e2e8f0;
+  --muted:   #94a3b8;
+  --blue:    #2563eb;
+  --green:   #22c55e;
+  --red:     #ef4444;
+  --amber:   #f59e0b;
+  --radius:  14px;
+  --shadow:  0 4px 24px rgba(0,0,0,0.35);
 }
 
 body {
@@ -51,15 +50,15 @@ body {
 .brand-icon {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, var(--blue), #1d4ed8);
+  background: linear-gradient(135deg, #e53935, #b71c1c);
   color: #fff;
   font-weight: 800;
-  font-size: 1.3rem;
+  font-size: 0.9rem;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   flex-shrink: 0;
 }
 
@@ -71,12 +70,12 @@ body {
 }
 
 .brand-sub {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--muted);
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
-/* Connection badge */
+/* ── Connection badge ────────────────────────────────────────────────────────── */
 .conn-badge {
   display: flex;
   align-items: center;
@@ -112,6 +111,7 @@ body {
   height: 8px;
   border-radius: 50%;
   background: currentColor;
+  flex-shrink: 0;
 }
 
 .conn-badge.conn-live .conn-dot {
@@ -123,7 +123,7 @@ body {
   50%       { opacity: 0.5; transform: scale(0.8); }
 }
 
-/* ── Offline banner ─────────────────────────────────────────────────────────── */
+/* ── Offline banner ──────────────────────────────────────────────────────────── */
 .offline-banner {
   background: rgba(239,68,68,0.15);
   border-bottom: 1px solid rgba(239,68,68,0.3);
@@ -132,11 +132,52 @@ body {
   padding: 8px 16px;
   font-size: 0.85rem;
   font-weight: 500;
+  flex-shrink: 0;
 }
 
 .hidden { display: none !important; }
 
-/* ── Layout ─────────────────────────────────────────────────────────────────── */
+/* ── Stats bar ───────────────────────────────────────────────────────────────── */
+.stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 9px 24px;
+  background: rgba(0,0,0,0.25);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.stats-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.stats-num {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.stats-label {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.stats-time {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.stats-divider {
+  color: var(--border);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────────────── */
 .layout {
   display: flex;
   gap: 20px;
@@ -145,7 +186,7 @@ body {
   min-height: 0;
 }
 
-/* ── Map ────────────────────────────────────────────────────────────────────── */
+/* ── Map ─────────────────────────────────────────────────────────────────────── */
 .map-wrap {
   flex: 3;
   min-height: 0;
@@ -161,9 +202,9 @@ body {
   overflow: hidden;
 }
 
-/* ── Sidebar ────────────────────────────────────────────────────────────────── */
+/* ── Sidebar ─────────────────────────────────────────────────────────────────── */
 .sidebar {
-  flex: 0 0 300px;
+  flex: 0 0 310px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -187,38 +228,38 @@ body {
   margin-top: 2px;
 }
 
-.active-count {
-  background: var(--blue);
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 999px;
-  white-space: nowrap;
-  margin-top: 4px;
-}
-
-/* Route legend */
-.route-legend {
+/* ── Route filter buttons ────────────────────────────────────────────────────── */
+.filter-wrap {
   display: flex;
-  align-items: center;
-  font-size: 0.8rem;
-  color: var(--muted);
-  padding: 8px 12px;
-  background: var(--surface);
-  border-radius: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-btn {
+  padding: 5px 13px;
+  border-radius: 999px;
   border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: inherit;
 }
 
-.legend-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 5px;
+.filter-btn:hover {
+  border-color: var(--rc, var(--blue));
+  color: var(--rc, var(--blue));
 }
 
-/* ── Bus card ───────────────────────────────────────────────────────────────── */
+.filter-btn.active {
+  background: var(--rc, var(--blue));
+  color: #fff;
+  border-color: transparent;
+}
+
+/* ── Bus card list ───────────────────────────────────────────────────────────── */
 #bus-list {
   display: flex;
   flex-direction: column;
@@ -227,6 +268,7 @@ body {
   flex: 1;
 }
 
+/* ── Bus card ────────────────────────────────────────────────────────────────── */
 .bus-card {
   background: var(--surface);
   border-radius: var(--radius);
@@ -234,18 +276,13 @@ body {
   border-left: 4px solid var(--blue);
   padding: 14px 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  transition: border-color 0.2s;
-}
-
-.bus-card.route-b {
-  border-left-color: var(--teal);
 }
 
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .card-bus-id {
@@ -273,25 +310,27 @@ body {
   border-radius: 50%;
   background: var(--green);
   animation: pulse-green 1.5s infinite;
+  flex-shrink: 0;
 }
 
 .card-route {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-bottom: 8px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  margin-bottom: 6px;
 }
 
 .card-stop {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text);
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 9px;
 }
 
 .card-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
+  margin-bottom: 8px;
 }
 
 .stat {
@@ -301,14 +340,14 @@ body {
 }
 
 .stat-label {
-  font-size: 0.68rem;
+  font-size: 0.67rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .stat-value {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #fff;
   margin-top: 2px;
@@ -317,18 +356,34 @@ body {
 .card-updated {
   font-size: 0.7rem;
   color: var(--muted);
-  margin-top: 8px;
 }
 
-/* ETA note */
+/* ── Occupancy badges ────────────────────────────────────────────────────────── */
+.occ-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.occ-low    { background: rgba(34,197,94,0.15);  color: #22c55e; }
+.occ-medium { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.occ-high   { background: rgba(239,68,68,0.15);  color: #ef4444; }
+
+/* ── ETA / disclaimer note ───────────────────────────────────────────────────── */
 .eta-note {
   font-size: 0.72rem;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.6;
   padding: 0 2px;
 }
 
-/* ── Leaflet custom bus marker ───────────────────────────────────────────────── */
+.eta-disclaimer {
+  opacity: 0.75;
+}
+
+/* ── Leaflet bus marker ──────────────────────────────────────────────────────── */
 .bus-marker {
   width: 34px;
   height: 34px;
@@ -338,13 +393,13 @@ body {
   justify-content: center;
   color: #fff;
   font-weight: 800;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   border: 3px solid rgba(255,255,255,0.9);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.45);
   cursor: pointer;
 }
 
-/* ── Responsive ─────────────────────────────────────────────────────────────── */
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
 @media (max-width: 860px) {
   .layout {
     flex-direction: column;
@@ -358,7 +413,7 @@ body {
 
   .sidebar {
     flex: none;
-    max-height: 50vh;
+    max-height: 52vh;
     overflow-y: auto;
   }
 
@@ -366,6 +421,7 @@ body {
 }
 
 @media (max-width: 500px) {
-  .brand-sub { display: none; }
-  .app-header { padding: 12px 16px; }
+  .brand-sub     { display: none; }
+  .app-header    { padding: 12px 16px; }
+  .stats-bar     { padding: 8px 16px; gap: 10px; }
 }

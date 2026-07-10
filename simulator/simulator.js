@@ -1,103 +1,128 @@
 /**
- * Maplewood City Bus Simulator
+ * Chennai Transit Live — Bus Simulator
  *
- * Simulates 4 buses running on 2 routes in the fictional small city of Maplewood.
+ * Simulates 8 buses (2 per route) across 4 Chennai route corridors.
  * Buses move stop-by-stop and reverse direction at each terminus.
- * Location updates are sent to the backend every 3 seconds.
+ * Sends updates to the backend every 2–4 seconds (random interval).
  *
- * Routes:
- *   Route A — Railway Station <-> North Market  (Bus-01, Bus-02)
- *   Route B — West Park <-> East Gate           (Bus-03, Bus-04)
+ * DEMO ONLY — not affiliated with MTC or CUMTA.
  */
 
 const axios = require('axios');
+const fs    = require('fs');
+const path  = require('path');
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000/api/update';
-const UPDATE_INTERVAL_MS = 3000;
+const BACKEND_URL    = process.env.BACKEND_URL || 'http://localhost:3000/api/update';
+const MIN_INTERVAL   = 2000;
+const MAX_INTERVAL   = 4000;
 
-// ── Route definitions ─────────────────────────────────────────────────────────
+// ── Load Chennai route data ───────────────────────────────────────────────────
+const routeDataPath = path.join(__dirname, '..', 'data', 'chennai-routes.json');
+const { routes }    = JSON.parse(fs.readFileSync(routeDataPath, 'utf8'));
 
-const ROUTES = {
-  'Route-A': {
-    name: 'Railway Station — North Market',
-    stops: [
-      { lat: 18.5050, lon: 73.8450, name: 'Railway Station' },
-      { lat: 18.5080, lon: 73.8455, name: 'Nehru Chowk' },
-      { lat: 18.5110, lon: 73.8460, name: 'Bus Stand' },
-      { lat: 18.5140, lon: 73.8465, name: 'Town Hall' },
-      { lat: 18.5170, lon: 73.8470, name: 'Central Market' },
-      { lat: 18.5200, lon: 73.8475, name: 'City Square' },
-      { lat: 18.5230, lon: 73.8480, name: 'College Road' },
-      { lat: 18.5260, lon: 73.8490, name: 'Green Park' },
-      { lat: 18.5290, lon: 73.8500, name: 'North Market' },
-    ],
-  },
-  'Route-B': {
-    name: 'West Park — East Gate',
-    stops: [
-      { lat: 18.5200, lon: 73.8300, name: 'West Park' },
-      { lat: 18.5200, lon: 73.8340, name: 'Hospital Road' },
-      { lat: 18.5200, lon: 73.8380, name: 'Civil Lines' },
-      { lat: 18.5200, lon: 73.8420, name: 'City Center' },
-      { lat: 18.5200, lon: 73.8460, name: 'Post Office' },
-      { lat: 18.5200, lon: 73.8500, name: 'IT Park' },
-      { lat: 18.5200, lon: 73.8540, name: 'Lake View' },
-      { lat: 18.5200, lon: 73.8580, name: 'East Gate' },
-    ],
-  },
-};
+const OCCUPANCY_LEVELS = ['Low', 'Medium', 'High'];
 
-// ── Bus state (staggered start positions so buses don't overlap) ──────────────
+// ── Build bus roster: 2 buses per route, staggered start positions ────────────
+const buses = [];
+routes.forEach(route => {
+  const mid = Math.floor(route.stops.length / 2);
+  buses.push({
+    id:        `MTC-${route.routeId.replace('CHN-', '')}A`,
+    routeId:   route.routeId,
+    stopIndex: 0,
+    direction: 1,
+    occupancy: randomOccupancy(),
+    occupancyCountdown: Math.floor(3 + Math.random() * 5),
+  });
+  buses.push({
+    id:        `MTC-${route.routeId.replace('CHN-', '')}B`,
+    routeId:   route.routeId,
+    stopIndex: mid,
+    direction: 1,
+    occupancy: randomOccupancy(),
+    occupancyCountdown: Math.floor(1 + Math.random() * 4),
+  });
+});
 
-const buses = [
-  { id: 'Bus-01', routeKey: 'Route-A', stopIndex: 0, direction: 1 },
-  { id: 'Bus-02', routeKey: 'Route-A', stopIndex: 4, direction: 1 },
-  { id: 'Bus-03', routeKey: 'Route-B', stopIndex: 0, direction: 1 },
-  { id: 'Bus-04', routeKey: 'Route-B', stopIndex: 4, direction: 1 },
-];
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
-// ── Send location update to backend ──────────────────────────────────────────
+function randomOccupancy() {
+  return OCCUPANCY_LEVELS[Math.floor(Math.random() * OCCUPANCY_LEVELS.length)];
+}
+
+function randomSpeed() {
+  return Math.round(15 + Math.random() * 30); // 15–45 km/h
+}
+
+// ── Send one location update ──────────────────────────────────────────────────
 
 async function sendLocation(bus) {
-  const route = ROUTES[bus.routeKey];
-  const stop = route.stops[bus.stopIndex];
+  const route     = routes.find(r => r.routeId === bus.routeId);
+  const stop      = route.stops[bus.stopIndex];
+  const nextIdx   = bus.stopIndex + bus.direction;
+  const nextStop  = route.stops[nextIdx] ? route.stops[nextIdx].name : stop.name;
+  const speed     = randomSpeed();
+
+  // Occasionally change occupancy
+  bus.occupancyCountdown--;
+  if (bus.occupancyCountdown <= 0) {
+    bus.occupancy          = randomOccupancy();
+    bus.occupancyCountdown = Math.floor(3 + Math.random() * 5);
+  }
 
   try {
     await axios.post(BACKEND_URL, {
-      busId: bus.id,
-      lat: stop.lat,
-      lon: stop.lon,
-      route: route.name,
-      stopName: stop.name,
+      busId:          bus.id,
+      lat:            stop.lat,
+      lon:            stop.lon,
+      routeId:        bus.routeId,
+      speedKmph:      speed,
+      nextStop,
+      occupancyLevel: bus.occupancy,
     });
-    console.log(`  ${bus.id}  ${route.name.padEnd(36)} => ${stop.name}`);
+
+    const routeLabel = `${bus.routeId} ${route.routeName}`;
+    console.log(
+      `  ${bus.id.padEnd(8)}  [${bus.occupancy.padEnd(6)}]  ` +
+      `${routeLabel.padEnd(30)}  -> ${stop.name}`
+    );
   } catch (err) {
-    console.error(`  ${bus.id}  ERROR: ${err.message}`);
+    console.error(`  ${bus.id.padEnd(8)}  ERROR: ${err.message}`);
   }
 
-  // Advance to the next stop; reverse direction at each terminus
+  // Advance stop; reverse direction at each terminus
   bus.stopIndex += bus.direction;
-  const lastIndex = route.stops.length - 1;
-  if (bus.stopIndex > lastIndex) {
+  const last = route.stops.length - 1;
+  if (bus.stopIndex > last) {
     bus.direction = -1;
-    bus.stopIndex = lastIndex - 1;
+    bus.stopIndex = last - 1;
   } else if (bus.stopIndex < 0) {
     bus.direction = 1;
     bus.stopIndex = 1;
   }
 }
 
-// ── Main loop ─────────────────────────────────────────────────────────────────
+// ── Main tick loop ────────────────────────────────────────────────────────────
 
-console.log('Maplewood City Bus Simulator');
-console.log('============================');
-console.log(`Backend : ${BACKEND_URL}`);
-console.log(`Buses   : ${buses.length} (${Object.keys(ROUTES).length} routes)`);
-console.log(`Interval: ${UPDATE_INTERVAL_MS / 1000}s\n`);
+function tick() {
+  const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  console.log(`\n[${ts}]`);
+  buses.forEach(bus => sendLocation(bus));
+  const delay = MIN_INTERVAL + Math.random() * (MAX_INTERVAL - MIN_INTERVAL);
+  setTimeout(tick, delay);
+}
 
-// Send immediately on startup, then repeat on interval
-buses.forEach((bus) => sendLocation(bus));
-setInterval(() => {
-  console.log(`[${new Date().toISOString()}]`);
-  buses.forEach((bus) => sendLocation(bus));
-}, UPDATE_INTERVAL_MS);
+// ── Startup ───────────────────────────────────────────────────────────────────
+
+console.log('\n Chennai Transit Live — Simulator');
+console.log(' ==================================');
+console.log(` Backend  : ${BACKEND_URL}`);
+console.log(` Buses    : ${buses.length} (${routes.length} routes)`);
+console.log(` Interval : ${MIN_INTERVAL / 1000}–${MAX_INTERVAL / 1000}s (random)\n`);
+console.log(` Bus ID    Occupancy  Route                           Current Stop`);
+console.log(` ${'─'.repeat(70)}`);
+
+// Fire immediately, then start the timed loop
+buses.forEach(bus => sendLocation(bus));
+const firstDelay = MIN_INTERVAL + Math.random() * (MAX_INTERVAL - MIN_INTERVAL);
+setTimeout(tick, firstDelay);

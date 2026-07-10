@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Maplewood Transit — Live Bus Tracker</title>
+  <title>Chennai Transit Live</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/style.css" />
@@ -13,23 +13,39 @@
   <!-- ── Header ────────────────────────────────────────────────────────────── -->
   <header class="app-header">
     <div class="header-brand">
-      <div class="brand-icon" aria-hidden="true">B</div>
+      <div class="brand-icon" aria-hidden="true">CT</div>
       <div>
-        <h1 class="brand-title">Maplewood Transit</h1>
-        <p class="brand-sub">Real-Time Bus Tracker &mdash; Demo</p>
+        <h1 class="brand-title">Chennai Transit Live</h1>
+        <p class="brand-sub">Real-time public transport simulation &mdash; not MTC official data</p>
       </div>
     </div>
-    <div class="header-status">
-      <div id="connection-badge" class="conn-badge conn-connecting">
-        <span class="conn-dot" id="conn-dot"></span>
-        <span id="conn-text">Connecting</span>
-      </div>
+    <div id="connection-badge" class="conn-badge conn-connecting">
+      <span class="conn-dot"></span>
+      <span id="conn-text">Connecting</span>
     </div>
   </header>
 
-  <!-- ── Offline banner (shown when socket disconnects) ────────────────────── -->
+  <!-- ── Offline banner ────────────────────────────────────────────────────── -->
   <div id="offline-banner" class="offline-banner hidden">
     Connection lost &mdash; attempting to reconnect&hellip;
+  </div>
+
+  <!-- ── Stats bar ─────────────────────────────────────────────────────────── -->
+  <div class="stats-bar">
+    <div class="stats-item">
+      <span class="stats-num" id="active-count">0</span>
+      <span class="stats-label">Live Buses</span>
+    </div>
+    <span class="stats-divider">&middot;</span>
+    <div class="stats-item">
+      <span class="stats-num" id="active-routes">0</span>
+      <span class="stats-label">Active Routes</span>
+    </div>
+    <span class="stats-divider">&middot;</span>
+    <div class="stats-item">
+      <span class="stats-label">Last update</span>
+      <span class="stats-time" id="last-updated">&mdash;</span>
+    </div>
   </div>
 
   <!-- ── Main layout ────────────────────────────────────────────────────────── -->
@@ -45,23 +61,27 @@
       <div class="sidebar-top">
         <div>
           <h2 class="sidebar-title">Live Buses</h2>
-          <p class="sidebar-hint">Updates every 3 s</p>
+          <p class="sidebar-hint">Updates every 2&ndash;4 s</p>
         </div>
-        <span class="active-count" id="active-count">0 active</span>
       </div>
 
-      <!-- Route legend -->
-      <div class="route-legend">
-        <span class="legend-dot" style="background:#2563eb;"></span> Route A
-        &nbsp;&nbsp;
-        <span class="legend-dot" style="background:#0d9488;"></span> Route B
+      <!-- Route filter buttons -->
+      <div class="filter-wrap">
+        <button class="filter-btn active" data-route="ALL">All</button>
+        <button class="filter-btn" data-route="CHN-01" style="--rc:#e53935">CHN-01</button>
+        <button class="filter-btn" data-route="CHN-02" style="--rc:#1565c0">CHN-02</button>
+        <button class="filter-btn" data-route="CHN-03" style="--rc:#00897b">CHN-03</button>
+        <button class="filter-btn" data-route="CHN-04" style="--rc:#7b1fa2">CHN-04</button>
       </div>
 
       <!-- Bus cards rendered by JS -->
       <div id="bus-list"></div>
 
-      <!-- Reference stop note -->
-      <p class="eta-note">ETA calculated to Maplewood Railway Station at 25 km/h.</p>
+      <!-- Footer note -->
+      <p class="eta-note">
+        ETA calculated to Chennai Central using bus speed.<br>
+        <span class="eta-disclaimer">&#9432; Simulated demo data &mdash; not affiliated with MTC or CUMTA.</span>
+      </p>
     </aside>
 
   </div>

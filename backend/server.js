@@ -9,6 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ── Serve frontend static files ────────────────────────────────────────────────
+const frontendDir = path.join(__dirname, '..', 'frontend');
+app.use(express.static(frontendDir));
+
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: { origin: '*', methods: ['GET', 'POST'] },

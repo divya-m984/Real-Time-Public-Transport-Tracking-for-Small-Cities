@@ -1,0 +1,34 @@
+{
+  "cities": [
+    {
+      "id": "chennai",
+      "name": "Chennai",
+      "label": "Chennai Transit Live",
+      "mapCenter": [13.0827, 80.2707],
+      "defaultZoom": 12,
+      "routeDataFile": "chennai-routes.json",
+      "stopsDataFile": "chennai-stops.json",
+      "referenceStop": { "name": "Chennai Central", "lat": 13.0827, "lon": 80.2707 }
+    },
+    {
+      "id": "mumbai",
+      "name": "Mumbai",
+      "label": "Mumbai Transit Live",
+      "mapCenter": [19.0760, 72.8777],
+      "defaultZoom": 12,
+      "routeDataFile": "mumbai-routes.json",
+      "stopsDataFile": "mumbai-stops.json",
+      "referenceStop": { "name": "CSMT", "lat": 18.9402, "lon": 72.8352 }
+    },
+    {
+      "id": "delhi",
+      "name": "Delhi",
+      "label": "Delhi Transit Live",
+      "mapCenter": [28.6139, 77.2090],
+      "defaultZoom": 12,
+      "routeDataFile": "delhi-routes.json",
+      "stopsDataFile": "delhi-stops.json",
+      "referenceStop": { "name": "Connaught Place", "lat": 28.6315, "lon": 77.2167 }
+    }
+  ]
+}

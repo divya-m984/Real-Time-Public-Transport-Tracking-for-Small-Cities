@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chennai Transit Live</title>
+  <title>Transit Live India</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/style.css" />
@@ -13,10 +13,10 @@
   <!-- ── Header ────────────────────────────────────────────────────────────── -->
   <header class="app-header">
     <div class="header-brand">
-      <div class="brand-icon" aria-hidden="true">CT</div>
+      <div class="brand-icon" aria-hidden="true">TL</div>
       <div>
-        <h1 class="brand-title">Chennai Transit Live</h1>
-        <p class="brand-sub">Real-time public transport simulation &mdash; not MTC official data</p>
+        <h1 class="brand-title">Transit Live India</h1>
+        <p class="brand-sub">Real-time simulated public transport tracking across Chennai, Mumbai and Delhi</p>
       </div>
     </div>
     <div id="connection-badge" class="conn-badge conn-connecting">
@@ -24,6 +24,14 @@
       <span id="conn-text">Connecting</span>
     </div>
   </header>
+
+  <!-- ── City selector ─────────────────────────────────────────────────────── -->
+  <div class="city-selector-wrap">
+    <div class="city-selector" id="city-selector" role="tablist" aria-label="Select city">
+      <!-- City tabs injected by JS after city config is loaded -->
+    </div>
+    <span class="sim-badge">Simulation / Demonstration Data</span>
+  </div>
 
   <!-- ── Offline banner ────────────────────────────────────────────────────── -->
   <div id="offline-banner" class="offline-banner hidden">
@@ -40,6 +48,10 @@
     <div class="stats-item">
       <span class="stats-num" id="active-routes">0</span>
       <span class="stats-label">Active Routes</span>
+    </div>
+    <span class="stats-divider">&middot;</span>
+    <div class="stats-item">
+      <span class="stats-label" id="city-label">Chennai Transit Live</span>
     </div>
     <span class="stats-divider">&middot;</span>
     <div class="stats-item">
@@ -60,27 +72,38 @@
     <aside class="sidebar">
       <div class="sidebar-top">
         <div>
-          <h2 class="sidebar-title">Live Buses</h2>
-          <p class="sidebar-hint">Updates every 2&ndash;4 s</p>
+          <h2 class="sidebar-title" id="sidebar-city-name">Journey Search</h2>
+          <p class="sidebar-hint">Find buses between two stops</p>
         </div>
       </div>
 
-      <!-- Route filter buttons -->
-      <div class="filter-wrap">
-        <button class="filter-btn active" data-route="ALL">All</button>
-        <button class="filter-btn" data-route="CHN-01" style="--rc:#e53935">CHN-01</button>
-        <button class="filter-btn" data-route="CHN-02" style="--rc:#1565c0">CHN-02</button>
-        <button class="filter-btn" data-route="CHN-03" style="--rc:#00897b">CHN-03</button>
-        <button class="filter-btn" data-route="CHN-04" style="--rc:#7b1fa2">CHN-04</button>
+      <!-- Journey search form -->
+      <div class="search-card" id="search-card">
+        <div class="search-row">
+          <span class="search-row-label">From</span>
+          <div id="from-combobox" class="combobox-wrap"></div>
+        </div>
+        <div class="swap-row">
+          <button id="swap-btn" class="swap-btn" title="Swap stops" aria-label="Swap origin and destination">&#8597;</button>
+        </div>
+        <div class="search-row">
+          <span class="search-row-label">To</span>
+          <div id="to-combobox" class="combobox-wrap"></div>
+        </div>
+        <div class="search-actions">
+          <button id="find-btn" class="find-btn">Find Buses</button>
+          <button id="clear-btn" class="clear-btn hidden">Clear</button>
+        </div>
       </div>
 
-      <!-- Bus cards rendered by JS -->
-      <div id="bus-list"></div>
+      <!-- Journey results injected by JS -->
+      <div id="results-panel">
+        <p class="empty-message" id="pre-search-hint">Select origin and destination stops above.</p>
+      </div>
 
       <!-- Footer note -->
       <p class="eta-note">
-        ETA calculated to Chennai Central using bus speed.<br>
-        <span class="eta-disclaimer">&#9432; Simulated demo data &mdash; not affiliated with MTC or CUMTA.</span>
+        <span class="eta-disclaimer">&#9432; Simulated demo data &mdash; ETAs are approximate. Not affiliated with any official transport authority.</span>
       </p>
     </aside>
 

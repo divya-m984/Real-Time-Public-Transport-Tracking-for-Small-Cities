@@ -425,3 +425,360 @@ body {
   .app-header    { padding: 12px 16px; }
   .stats-bar     { padding: 8px 16px; gap: 10px; }
 }
+
+/* ── City selector ────────────────────────────────────────────────────────── */
+.city-selector-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.city-selector {
+  display: flex;
+  gap: 4px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.city-tab {
+  padding: 7px 20px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.city-tab:hover {
+  background: rgba(255,255,255,0.07);
+  color: var(--text);
+}
+
+.city-tab.active {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* ── Simulation badge ─────────────────────────────────────────────────────── */
+.sim-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--amber);
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+/* ── Empty state message ──────────────────────────────────────────────────── */
+.empty-message {
+  font-size: 0.82rem;
+  color: var(--muted);
+  padding: 16px 4px;
+  text-align: center;
+}
+
+/* ── Responsive additions ─────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .city-selector-wrap {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 500px) {
+  .city-tab {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+  }
+  .sim-badge {
+    display: none;
+  }
+}
+
+/* ── Search card ──────────────────────────────────────────────────────────── */
+.search-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-row-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 30px;
+  flex-shrink: 0;
+}
+
+.swap-row {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 38px;
+}
+
+.swap-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 7px;
+  width: 30px;
+  height: 24px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s, color 0.18s;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.swap-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: var(--text);
+}
+
+/* ── Combobox ─────────────────────────────────────────────────────────────── */
+.combobox-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.combobox-input {
+  width: 100%;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.84rem;
+  padding: 7px 10px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.18s;
+}
+
+.combobox-input:focus {
+  border-color: var(--blue);
+}
+
+.combobox-input::placeholder {
+  color: var(--muted);
+}
+
+.combobox-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #1a2744;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+}
+
+.combobox-dropdown.hidden { display: none; }
+
+.combobox-option {
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.combobox-option:hover,
+.combobox-option.highlighted {
+  background: rgba(37,99,235,0.3);
+  color: #fff;
+}
+
+.combobox-option.selected {
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+/* ── Search actions ───────────────────────────────────────────────────────── */
+.search-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.find-btn {
+  flex: 1;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s;
+  font-family: inherit;
+}
+
+.find-btn:hover   { background: #1d4ed8; }
+.find-btn:disabled { background: #374151; color: var(--muted); cursor: not-allowed; }
+
+.clear-btn {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.clear-btn:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+
+/* ── Results panel ────────────────────────────────────────────────────────── */
+#results-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Journey card ─────────────────────────────────────────────────────────── */
+.journey-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--blue);
+  padding: 12px 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+
+.journey-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.route-pill {
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+
+.journey-route-name {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.journey-stop-count {
+  font-size: 0.7rem;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.journey-stops {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.79rem;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+
+.stop-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.stop-arrow { color: var(--muted); }
+
+/* ── Active buses in journey card ─────────────────────────────────────────── */
+.active-buses {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bus-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 7px;
+  padding: 6px 10px;
+}
+
+.bus-row-id {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  min-width: 72px;
+  flex-shrink: 0;
+}
+
+.bus-row-eta {
+  font-size: 0.75rem;
+  color: var(--muted);
+  flex: 1;
+}
+
+.no-active-buses {
+  font-size: 0.77rem;
+  color: var(--muted);
+  padding: 2px 0;
+  font-style: italic;
+}
+
+.no-direct-route {
+  font-size: 0.83rem;
+  color: var(--muted);
+  padding: 16px 4px;
+  text-align: center;
+  line-height: 1.6;
+}

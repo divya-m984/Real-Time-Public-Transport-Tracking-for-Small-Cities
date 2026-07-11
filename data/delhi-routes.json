@@ -1,0 +1,118 @@
+{
+  "_disclaimer": "DEMO DATA ONLY — Simulated Delhi route corridors for educational/portfolio use. Stop coordinates are approximate landmarks. Not affiliated with DTC, DMRC, or any official transport authority.",
+  "cityId": "delhi",
+  "routes": [
+    {
+      "routeId": "DEL-R1",
+      "cityId": "delhi",
+      "routeName": "Yellow Line Connect",
+      "routeNumber": "DL-101",
+      "direction": "outbound",
+      "color": "#f9a825",
+      "stopIds": [
+        "DEL-STOP-ISBT",
+        "DEL-STOP-KASHMERE",
+        "DEL-STOP-CHANDNI",
+        "DEL-STOP-RAJIV-CHOWK",
+        "DEL-STOP-CENTRAL-SEC",
+        "DEL-STOP-AIIMS"
+      ],
+      "stops": [
+        { "stopId": "DEL01-01", "name": "ISBT",               "lat": 28.6689, "lon": 77.2272 },
+        { "stopId": "DEL01-02", "name": "Kashmere Gate",       "lat": 28.6672, "lon": 77.2283 },
+        { "stopId": "DEL01-03", "name": "Chandni Chowk",       "lat": 28.6562, "lon": 77.2311 },
+        { "stopId": "DEL01-04", "name": "Rajiv Chowk",         "lat": 28.6330, "lon": 77.2196 },
+        { "stopId": "DEL01-05", "name": "Central Secretariat", "lat": 28.6151, "lon": 77.2101 },
+        { "stopId": "DEL01-06", "name": "AIIMS",               "lat": 28.5677, "lon": 77.2105 }
+      ]
+    },
+    {
+      "routeId": "DEL-R2",
+      "cityId": "delhi",
+      "routeName": "Blue Line Express",
+      "routeNumber": "DL-502",
+      "direction": "outbound",
+      "color": "#1565c0",
+      "stopIds": [
+        "DEL-STOP-DWARKA",
+        "DEL-STOP-JANAKPURI",
+        "DEL-STOP-RAJOURI",
+        "DEL-STOP-RAJIV-CHOWK",
+        "DEL-STOP-MANDI-HOUSE",
+        "DEL-STOP-NOIDA-18"
+      ],
+      "stops": [
+        { "stopId": "DEL02-01", "name": "Dwarka",          "lat": 28.5921, "lon": 77.0460 },
+        { "stopId": "DEL02-02", "name": "Janakpuri",       "lat": 28.6219, "lon": 77.0850 },
+        { "stopId": "DEL02-03", "name": "Rajouri Garden",  "lat": 28.6425, "lon": 77.1192 },
+        { "stopId": "DEL02-04", "name": "Rajiv Chowk",     "lat": 28.6330, "lon": 77.2196 },
+        { "stopId": "DEL02-05", "name": "Mandi House",     "lat": 28.6256, "lon": 77.2357 },
+        { "stopId": "DEL02-06", "name": "Noida Sector 18", "lat": 28.5706, "lon": 77.3261 }
+      ]
+    },
+    {
+      "routeId": "DEL-R3",
+      "cityId": "delhi",
+      "routeName": "Red Fort Loop",
+      "routeNumber": "DL-201",
+      "direction": "outbound",
+      "color": "#c62828",
+      "stopIds": [
+        "DEL-STOP-ISBT",
+        "DEL-STOP-RED-FORT",
+        "DEL-STOP-ND-RAILWAY",
+        "DEL-STOP-CP",
+        "DEL-STOP-KAROL-BAGH"
+      ],
+      "stops": [
+        { "stopId": "DEL03-01", "name": "ISBT",              "lat": 28.6689, "lon": 77.2272 },
+        { "stopId": "DEL03-02", "name": "Red Fort",          "lat": 28.6562, "lon": 77.2410 },
+        { "stopId": "DEL03-03", "name": "New Delhi Railway", "lat": 28.6431, "lon": 77.2218 },
+        { "stopId": "DEL03-04", "name": "Connaught Place",   "lat": 28.6315, "lon": 77.2167 },
+        { "stopId": "DEL03-05", "name": "Karol Bagh",        "lat": 28.6518, "lon": 77.1901 }
+      ]
+    },
+    {
+      "routeId": "DEL-R4",
+      "cityId": "delhi",
+      "routeName": "Airport Express",
+      "routeNumber": "DL-Airport",
+      "direction": "outbound",
+      "color": "#00695c",
+      "stopIds": [
+        "DEL-STOP-MAHIPALPUR",
+        "DEL-STOP-AEROCITY",
+        "DEL-STOP-DHAULA-KUAN",
+        "DEL-STOP-RK-PURAM",
+        "DEL-STOP-SAFDURJUNG"
+      ],
+      "stops": [
+        { "stopId": "DEL04-01", "name": "Mahipalpur",  "lat": 28.5367, "lon": 77.1282 },
+        { "stopId": "DEL04-02", "name": "Aerocity",    "lat": 28.5566, "lon": 77.1202 },
+        { "stopId": "DEL04-03", "name": "Dhaula Kuan", "lat": 28.5921, "lon": 77.1672 },
+        { "stopId": "DEL04-04", "name": "RK Puram",    "lat": 28.5642, "lon": 77.1853 },
+        { "stopId": "DEL04-05", "name": "Safdurjung",  "lat": 28.5687, "lon": 77.2020 }
+      ]
+    },
+    {
+      "routeId": "DEL-R5",
+      "cityId": "delhi",
+      "routeName": "Heritage Connect",
+      "routeNumber": "DL-103",
+      "direction": "outbound",
+      "color": "#ad1457",
+      "stopIds": [
+        "DEL-STOP-ISBT",
+        "DEL-STOP-CHANDNI",
+        "DEL-STOP-RAJIV-CHOWK",
+        "DEL-STOP-MANDI-HOUSE"
+      ],
+      "stops": [
+        { "stopId": "DEL05-01", "name": "ISBT",            "lat": 28.6689, "lon": 77.2272 },
+        { "stopId": "DEL05-02", "name": "Chandni Chowk",   "lat": 28.6562, "lon": 77.2311 },
+        { "stopId": "DEL05-03", "name": "Rajiv Chowk",     "lat": 28.6330, "lon": 77.2196 },
+        { "stopId": "DEL05-04", "name": "Mandi House",     "lat": 28.6256, "lon": 77.2357 }
+      ]
+    }
+  ]
+}

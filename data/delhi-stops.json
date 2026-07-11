@@ -1,0 +1,26 @@
+{
+  "_disclaimer": "DEMO DATA ONLY — Simulated Delhi stop positions for educational/portfolio use. Coordinates are approximate landmarks. Not affiliated with DTC, DMRC, or any official transport authority.",
+  "cityId": "delhi",
+  "stops": [
+    { "stopId": "DEL-STOP-ISBT",         "cityId": "delhi", "name": "ISBT",               "lat": 28.6689, "lon": 77.2272 },
+    { "stopId": "DEL-STOP-KASHMERE",     "cityId": "delhi", "name": "Kashmere Gate",       "lat": 28.6672, "lon": 77.2283 },
+    { "stopId": "DEL-STOP-CHANDNI",      "cityId": "delhi", "name": "Chandni Chowk",       "lat": 28.6562, "lon": 77.2311 },
+    { "stopId": "DEL-STOP-RAJIV-CHOWK",  "cityId": "delhi", "name": "Rajiv Chowk",         "lat": 28.6330, "lon": 77.2196 },
+    { "stopId": "DEL-STOP-CENTRAL-SEC",  "cityId": "delhi", "name": "Central Secretariat", "lat": 28.6151, "lon": 77.2101 },
+    { "stopId": "DEL-STOP-AIIMS",        "cityId": "delhi", "name": "AIIMS",               "lat": 28.5677, "lon": 77.2105 },
+    { "stopId": "DEL-STOP-DWARKA",       "cityId": "delhi", "name": "Dwarka",              "lat": 28.5921, "lon": 77.0460 },
+    { "stopId": "DEL-STOP-JANAKPURI",    "cityId": "delhi", "name": "Janakpuri",           "lat": 28.6219, "lon": 77.0850 },
+    { "stopId": "DEL-STOP-RAJOURI",      "cityId": "delhi", "name": "Rajouri Garden",      "lat": 28.6425, "lon": 77.1192 },
+    { "stopId": "DEL-STOP-MANDI-HOUSE",  "cityId": "delhi", "name": "Mandi House",         "lat": 28.6256, "lon": 77.2357 },
+    { "stopId": "DEL-STOP-NOIDA-18",     "cityId": "delhi", "name": "Noida Sector 18",     "lat": 28.5706, "lon": 77.3261 },
+    { "stopId": "DEL-STOP-RED-FORT",     "cityId": "delhi", "name": "Red Fort",            "lat": 28.6562, "lon": 77.2410 },
+    { "stopId": "DEL-STOP-ND-RAILWAY",   "cityId": "delhi", "name": "New Delhi Railway",   "lat": 28.6431, "lon": 77.2218 },
+    { "stopId": "DEL-STOP-CP",           "cityId": "delhi", "name": "Connaught Place",     "lat": 28.6315, "lon": 77.2167 },
+    { "stopId": "DEL-STOP-KAROL-BAGH",   "cityId": "delhi", "name": "Karol Bagh",          "lat": 28.6518, "lon": 77.1901 },
+    { "stopId": "DEL-STOP-MAHIPALPUR",   "cityId": "delhi", "name": "Mahipalpur",          "lat": 28.5367, "lon": 77.1282 },
+    { "stopId": "DEL-STOP-AEROCITY",     "cityId": "delhi", "name": "Aerocity",            "lat": 28.5566, "lon": 77.1202 },
+    { "stopId": "DEL-STOP-DHAULA-KUAN",  "cityId": "delhi", "name": "Dhaula Kuan",         "lat": 28.5921, "lon": 77.1672 },
+    { "stopId": "DEL-STOP-RK-PURAM",     "cityId": "delhi", "name": "RK Puram",            "lat": 28.5642, "lon": 77.1853 },
+    { "stopId": "DEL-STOP-SAFDURJUNG",   "cityId": "delhi", "name": "Safdurjung",          "lat": 28.5687, "lon": 77.2020 }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "_disclaimer": "DEMO DATA ONLY — Simulated Mumbai stop positions for educational/portfolio use. Coordinates are approximate landmarks. Not affiliated with BEST, MMRDA, or any official transport authority.",
+  "cityId": "mumbai",
+  "stops": [
+    { "stopId": "MUM-STOP-CSMT",      "cityId": "mumbai", "name": "CSMT",      "lat": 18.9402, "lon": 72.8352 },
+    { "stopId": "MUM-STOP-DADAR",     "cityId": "mumbai", "name": "Dadar",     "lat": 19.0190, "lon": 72.8420 },
+    { "stopId": "MUM-STOP-BANDRA",    "cityId": "mumbai", "name": "Bandra",    "lat": 19.0596, "lon": 72.8295 },
+    { "stopId": "MUM-STOP-ANDHERI",   "cityId": "mumbai", "name": "Andheri",   "lat": 19.1197, "lon": 72.8468 },
+    { "stopId": "MUM-STOP-BORIVALI",  "cityId": "mumbai", "name": "Borivali",  "lat": 19.2330, "lon": 72.8567 },
+    { "stopId": "MUM-STOP-KURLA",     "cityId": "mumbai", "name": "Kurla",     "lat": 19.0733, "lon": 72.8794 },
+    { "stopId": "MUM-STOP-GHATKOPAR", "cityId": "mumbai", "name": "Ghatkopar", "lat": 19.0863, "lon": 72.9085 },
+    { "stopId": "MUM-STOP-MULUND",    "cityId": "mumbai", "name": "Mulund",    "lat": 19.1726, "lon": 72.9570 },
+    { "stopId": "MUM-STOP-THANE",     "cityId": "mumbai", "name": "Thane",     "lat": 19.1939, "lon": 72.9757 },
+    { "stopId": "MUM-STOP-WADALA",    "cityId": "mumbai", "name": "Wadala",    "lat": 19.0188, "lon": 72.8567 },
+    { "stopId": "MUM-STOP-CHEMBUR",   "cityId": "mumbai", "name": "Chembur",   "lat": 19.0622, "lon": 72.8997 },
+    { "stopId": "MUM-STOP-VASHI",     "cityId": "mumbai", "name": "Vashi",     "lat": 19.0771, "lon": 73.0000 },
+    { "stopId": "MUM-STOP-BELAPUR",   "cityId": "mumbai", "name": "Belapur",   "lat": 19.0218, "lon": 73.0368 },
+    { "stopId": "MUM-STOP-BKC",       "cityId": "mumbai", "name": "BKC",       "lat": 19.0668, "lon": 72.8680 },
+    { "stopId": "MUM-STOP-SION",      "cityId": "mumbai", "name": "Sion",      "lat": 19.0440, "lon": 72.8622 }
+  ]
+}

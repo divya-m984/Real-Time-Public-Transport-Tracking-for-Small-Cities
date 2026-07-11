@@ -1,0 +1,114 @@
+{
+  "_disclaimer": "DEMO DATA ONLY — Simulated Mumbai route corridors for educational/portfolio use. Stop coordinates are approximate landmarks. Not affiliated with BEST, MMRDA, or any official transport authority.",
+  "cityId": "mumbai",
+  "routes": [
+    {
+      "routeId": "MUM-R1",
+      "cityId": "mumbai",
+      "routeName": "Western Corridor",
+      "routeNumber": "201 Ltd",
+      "direction": "outbound",
+      "color": "#f57c00",
+      "stopIds": [
+        "MUM-STOP-CSMT",
+        "MUM-STOP-DADAR",
+        "MUM-STOP-BANDRA",
+        "MUM-STOP-ANDHERI",
+        "MUM-STOP-BORIVALI"
+      ],
+      "stops": [
+        { "stopId": "MUM01-01", "name": "CSMT",     "lat": 18.9402, "lon": 72.8352 },
+        { "stopId": "MUM01-02", "name": "Dadar",     "lat": 19.0190, "lon": 72.8420 },
+        { "stopId": "MUM01-03", "name": "Bandra",    "lat": 19.0596, "lon": 72.8295 },
+        { "stopId": "MUM01-04", "name": "Andheri",   "lat": 19.1197, "lon": 72.8468 },
+        { "stopId": "MUM01-05", "name": "Borivali",  "lat": 19.2330, "lon": 72.8567 }
+      ]
+    },
+    {
+      "routeId": "MUM-R2",
+      "cityId": "mumbai",
+      "routeName": "Eastern Link",
+      "routeNumber": "302",
+      "direction": "outbound",
+      "color": "#0277bd",
+      "stopIds": [
+        "MUM-STOP-CSMT",
+        "MUM-STOP-KURLA",
+        "MUM-STOP-GHATKOPAR",
+        "MUM-STOP-MULUND",
+        "MUM-STOP-THANE"
+      ],
+      "stops": [
+        { "stopId": "MUM02-01", "name": "CSMT",      "lat": 18.9402, "lon": 72.8352 },
+        { "stopId": "MUM02-02", "name": "Kurla",     "lat": 19.0733, "lon": 72.8794 },
+        { "stopId": "MUM02-03", "name": "Ghatkopar", "lat": 19.0863, "lon": 72.9085 },
+        { "stopId": "MUM02-04", "name": "Mulund",    "lat": 19.1726, "lon": 72.9570 },
+        { "stopId": "MUM02-05", "name": "Thane",     "lat": 19.1939, "lon": 72.9757 }
+      ]
+    },
+    {
+      "routeId": "MUM-R3",
+      "cityId": "mumbai",
+      "routeName": "Harbour Route",
+      "routeNumber": "504",
+      "direction": "outbound",
+      "color": "#2e7d32",
+      "stopIds": [
+        "MUM-STOP-CSMT",
+        "MUM-STOP-WADALA",
+        "MUM-STOP-CHEMBUR",
+        "MUM-STOP-VASHI",
+        "MUM-STOP-BELAPUR"
+      ],
+      "stops": [
+        { "stopId": "MUM03-01", "name": "CSMT",     "lat": 18.9402, "lon": 72.8352 },
+        { "stopId": "MUM03-02", "name": "Wadala",   "lat": 19.0188, "lon": 72.8567 },
+        { "stopId": "MUM03-03", "name": "Chembur",  "lat": 19.0622, "lon": 72.8997 },
+        { "stopId": "MUM03-04", "name": "Vashi",    "lat": 19.0771, "lon": 73.0000 },
+        { "stopId": "MUM03-05", "name": "Belapur",  "lat": 19.0218, "lon": 73.0368 }
+      ]
+    },
+    {
+      "routeId": "MUM-R4",
+      "cityId": "mumbai",
+      "routeName": "BKC Connect",
+      "routeNumber": "A1 Ltd",
+      "direction": "outbound",
+      "color": "#c62828",
+      "stopIds": [
+        "MUM-STOP-BANDRA",
+        "MUM-STOP-BKC",
+        "MUM-STOP-KURLA",
+        "MUM-STOP-SION",
+        "MUM-STOP-CHEMBUR"
+      ],
+      "stops": [
+        { "stopId": "MUM04-01", "name": "Bandra",   "lat": 19.0596, "lon": 72.8295 },
+        { "stopId": "MUM04-02", "name": "BKC",      "lat": 19.0668, "lon": 72.8680 },
+        { "stopId": "MUM04-03", "name": "Kurla",    "lat": 19.0733, "lon": 72.8794 },
+        { "stopId": "MUM04-04", "name": "Sion",     "lat": 19.0440, "lon": 72.8622 },
+        { "stopId": "MUM04-05", "name": "Chembur",  "lat": 19.0622, "lon": 72.8997 }
+      ]
+    },
+    {
+      "routeId": "MUM-R5",
+      "cityId": "mumbai",
+      "routeName": "Suburban Express",
+      "routeNumber": "302 Exp",
+      "direction": "outbound",
+      "color": "#6a1b9a",
+      "stopIds": [
+        "MUM-STOP-DADAR",
+        "MUM-STOP-BANDRA",
+        "MUM-STOP-KURLA",
+        "MUM-STOP-CHEMBUR"
+      ],
+      "stops": [
+        { "stopId": "MUM05-01", "name": "Dadar",   "lat": 19.0190, "lon": 72.8420 },
+        { "stopId": "MUM05-02", "name": "Bandra",  "lat": 19.0596, "lon": 72.8295 },
+        { "stopId": "MUM05-03", "name": "Kurla",   "lat": 19.0733, "lon": 72.8794 },
+        { "stopId": "MUM05-04", "name": "Chembur", "lat": 19.0622, "lon": 72.8997 }
+      ]
+    }
+  ]
+}

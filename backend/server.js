@@ -5,6 +5,8 @@ const cors     = require('cors');
 const fs       = require('fs');
 const path     = require('path');
 
+const { getJourneyGeometry } = require('./services/route-shape-service');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -138,99 +140,117 @@ app.get('/api/locations', (req, res) => {
 });
 
 // ── Journey search ────────────────────────────────────────────────────────────
-app.get('/api/journeys', (req, res) => {
-  const { cityId, fromStopId, toStopId } = req.query;
+app.get('/api/journeys', async (req, res) => {
+  try {
+    const { cityId, fromStopId, toStopId } = req.query;
 
-  if (!cityId)     return res.status(400).json({ error: 'cityId is required' });
-  if (!fromStopId) return res.status(400).json({ error: 'fromStopId is required' });
-  if (!toStopId)   return res.status(400).json({ error: 'toStopId is required' });
+    if (!cityId)     return res.status(400).json({ error: 'cityId is required' });
+    if (!fromStopId) return res.status(400).json({ error: 'fromStopId is required' });
+    if (!toStopId)   return res.status(400).json({ error: 'toStopId is required' });
 
-  if (!citiesById[cityId])
-    return res.status(404).json({ error: `Unknown city: "${cityId}"` });
+    if (!citiesById[cityId])
+      return res.status(404).json({ error: `Unknown city: "${cityId}"` });
 
-  const cityStops = stopsByCityId[cityId];
+    const cityStops = stopsByCityId[cityId];
 
-  if (!cityStops[fromStopId])
-    return res.status(404).json({ error: `Stop "${fromStopId}" not found in ${cityId}` });
-  if (!cityStops[toStopId])
-    return res.status(404).json({ error: `Stop "${toStopId}" not found in ${cityId}` });
-  if (fromStopId === toStopId)
-    return res.status(400).json({ error: 'Origin and destination must be different stops' });
+    if (!cityStops[fromStopId])
+      return res.status(404).json({ error: `Stop "${fromStopId}" not found in ${cityId}` });
+    if (!cityStops[toStopId])
+      return res.status(404).json({ error: `Stop "${toStopId}" not found in ${cityId}` });
+    if (fromStopId === toStopId)
+      return res.status(400).json({ error: 'Origin and destination must be different stops' });
 
-  // Check stop belongs to the correct city
-  if (cityStops[fromStopId].cityId !== cityId)
-    return res.status(400).json({ error: `Stop "${fromStopId}" does not belong to city "${cityId}"` });
-  if (cityStops[toStopId].cityId !== cityId)
-    return res.status(400).json({ error: `Stop "${toStopId}" does not belong to city "${cityId}"` });
+    // Check stop belongs to the correct city
+    if (cityStops[fromStopId].cityId !== cityId)
+      return res.status(400).json({ error: `Stop "${fromStopId}" does not belong to city "${cityId}"` });
+    if (cityStops[toStopId].cityId !== cityId)
+      return res.status(400).json({ error: `Stop "${toStopId}" does not belong to city "${cityId}"` });
 
-  const fromStop = cityStops[fromStopId];
-  const toStop   = cityStops[toStopId];
-  const journeys = [];
+    const fromStop = cityStops[fromStopId];
+    const toStop   = cityStops[toStopId];
+    const journeys = [];
 
-  Object.values(routesByCityId[cityId]).forEach(route => {
-    if (!route.stopIds) return;
+    Object.values(routesByCityId[cityId]).forEach(route => {
+      if (!route.stopIds) return;
 
-    const fromIndex = route.stopIds.indexOf(fromStopId);
-    const toIndex   = route.stopIds.indexOf(toStopId);
+      const fromIndex = route.stopIds.indexOf(fromStopId);
+      const toIndex   = route.stopIds.indexOf(toStopId);
 
-    if (fromIndex === -1 || toIndex === -1 || fromIndex >= toIndex) return;
+      if (fromIndex === -1 || toIndex === -1 || fromIndex >= toIndex) return;
 
-    // Stops in the relevant segment (boarding → destination inclusive)
-    const segmentStopIds = route.stopIds.slice(fromIndex, toIndex + 1);
-    const segmentStops   = segmentStopIds.map(id => cityStops[id]).filter(Boolean);
+      // Stops in the relevant segment (boarding → destination inclusive)
+      const segmentStopIds = route.stopIds.slice(fromIndex, toIndex + 1);
+      const segmentStops   = segmentStopIds.map(id => cityStops[id]).filter(Boolean);
 
-    const intermediateStops = segmentStops.slice(1, -1);  // exclude boarding and destination
+      const intermediateStops = segmentStops.slice(1, -1);  // exclude boarding and destination
 
-    // Find active buses on this route
-    const activeBuses = Object.values(busLocations[cityId])
-      .filter(b => b.routeId === route.routeId)
-      .map(bus => {
-        const eta = estimateEtaMinutes(bus, route, fromIndex, cityStops);
-        return {
-          busId:          bus.busId,
-          lat:            bus.lat,
-          lon:            bus.lon,
-          nextStop:       bus.nextStop,
-          speedKmph:      bus.speedKmph,
-          occupancyLevel: bus.occupancyLevel,
-          timestamp:      bus.timestamp,
-          etaMinutes:     eta,
-          etaLabel:       eta === null ? 'ETA unavailable'
-                          : eta === 0  ? 'Arriving soon'
-                          : `~${eta} min (approx, simulated)`,
-        };
-      })
-      // Sort: buses with ETA first, then by ETA ascending
-      .sort((a, b) => {
-        if (a.etaMinutes === null && b.etaMinutes === null) return 0;
-        if (a.etaMinutes === null) return 1;
-        if (b.etaMinutes === null) return -1;
-        return a.etaMinutes - b.etaMinutes;
+      // Find active buses on this route
+      const activeBuses = Object.values(busLocations[cityId])
+        .filter(b => b.routeId === route.routeId)
+        .map(bus => {
+          const eta = estimateEtaMinutes(bus, route, fromIndex, cityStops);
+          return {
+            busId:          bus.busId,
+            lat:            bus.lat,
+            lon:            bus.lon,
+            nextStop:       bus.nextStop,
+            speedKmph:      bus.speedKmph,
+            occupancyLevel: bus.occupancyLevel,
+            timestamp:      bus.timestamp,
+            etaMinutes:     eta,
+            etaLabel:       eta === null ? 'ETA unavailable'
+                            : eta === 0  ? 'Arriving soon'
+                            : `~${eta} min (approx, simulated)`,
+          };
+        })
+        // Sort: buses with ETA first, then by ETA ascending
+        .sort((a, b) => {
+          if (a.etaMinutes === null && b.etaMinutes === null) return 0;
+          if (a.etaMinutes === null) return 1;
+          if (b.etaMinutes === null) return -1;
+          return a.etaMinutes - b.etaMinutes;
+        });
+
+      journeys.push({
+        routeId:                route.routeId,
+        routeNumber:            route.routeNumber || route.routeId,
+        routeName:              route.routeName,
+        direction:              route.direction || 'outbound',
+        color:                  route.color,
+        boardingStopIndex:      fromIndex,
+        destinationStopIndex:   toIndex,
+        intermediateStopCount:  intermediateStops.length,
+        intermediateStops,
+        routeSegmentStops:      segmentStops,
+        activeBuses,
       });
-
-    journeys.push({
-      routeId:                route.routeId,
-      routeNumber:            route.routeNumber || route.routeId,
-      routeName:              route.routeName,
-      direction:              route.direction || 'outbound',
-      color:                  route.color,
-      boardingStopIndex:      fromIndex,
-      destinationStopIndex:   toIndex,
-      intermediateStopCount:  intermediateStops.length,
-      intermediateStops,
-      routeSegmentStops:      segmentStops,
-      activeBuses,
     });
-  });
 
-  // Sort journeys: most active buses first, then fewest intermediate stops
-  journeys.sort((a, b) => {
-    if (b.activeBuses.length !== a.activeBuses.length)
-      return b.activeBuses.length - a.activeBuses.length;
-    return a.intermediateStopCount - b.intermediateStopCount;
-  });
+    // Sort journeys: most active buses first, then fewest intermediate stops
+    journeys.sort((a, b) => {
+      if (b.activeBuses.length !== a.activeBuses.length)
+        return b.activeBuses.length - a.activeBuses.length;
+      return a.intermediateStopCount - b.intermediateStopCount;
+    });
 
-  res.json({ cityId, fromStop, toStop, journeys });
+    // ── Fetch road geometry for each matching journey ─────────────────────────
+    // Fetched in parallel; each call uses the in-memory cache on repeated searches.
+    // Route geometry belongs to the journey route, not to individual bus positions.
+    // getJourneyGeometry never throws — it always returns at minimum a fallback shape.
+    await Promise.all(journeys.map(async journey => {
+      journey.routeGeometry = await getJourneyGeometry({
+        cityId,
+        routeId:      journey.routeId,
+        direction:    journey.direction,
+        segmentStops: journey.routeSegmentStops,
+      });
+    }));
+
+    res.json({ cityId, fromStop, toStop, journeys });
+  } catch (err) {
+    console.error('[journeys] Unexpected error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // ── ETA estimate: minutes until a bus reaches the boarding stop ───────────────

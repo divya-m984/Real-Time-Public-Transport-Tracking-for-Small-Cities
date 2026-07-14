@@ -101,6 +101,11 @@
         <p class="empty-message" id="pre-search-hint">Select origin and destination stops above.</p>
       </div>
 
+      <!-- Road routing fallback note — shown only when OSRM is unavailable -->
+      <p id="road-routing-note" class="routing-note hidden">
+        &#9888; Detailed road route temporarily unavailable. Showing approximate stop-to-stop lines.
+      </p>
+
       <!-- Footer note -->
       <p class="eta-note">
         <span class="eta-disclaimer">&#9432; Simulated demo data &mdash; ETAs are approximate. Not affiliated with any official transport authority.</span>
@@ -109,7 +114,7 @@
 
   </div>
 
-  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/main.js"></script>
 </body>

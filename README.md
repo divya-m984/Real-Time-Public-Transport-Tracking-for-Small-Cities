@@ -66,9 +66,11 @@ Simulator  --POST /api/update-->  Express backend  --Socket.IO room-->  Browser
 (every 2–4 s,                     validates + stores                    journey search UI
  city-prefixed bus IDs)            per-city in memory                   (Leaflet + vanilla JS)
 
-Browser  --GET /api/journeys-->  Express backend
-(on Find Buses press)             matches routes, calculates ETAs,
-                                  returns journey list
+Browser  --GET /api/journeys-->  Express backend  --OSRM route API-->  router.project-osrm.org
+(on Find Buses press)             matches routes,                       returns road-following
+                                  fetches road geometry,                GeoJSON LineString
+                                  calculates ETAs,
+                                  returns journey list + routeGeometry
 ```
 
 1. The **backend** loads `data/cities.json` at startup, reads each city's stop file and route file,
@@ -76,10 +78,54 @@ Browser  --GET /api/journeys-->  Express backend
 2. The **simulator** moves buses along predefined stop sequences, bounces at each terminus, and
    POSTs position updates (including `cityId`) to `POST /api/update`.
 3. The **frontend** calls `GET /api/stops` to populate the comboboxes when a city is selected.
-4. On **Find Buses**, the frontend calls `GET /api/journeys`; the backend returns all direct routes
-   connecting the two stops, with any currently active buses and their ETAs.
-5. Live `locationUpdate` events arrive via Socket.IO and move bus markers — but only for routes
+4. On **Find Buses**, the frontend calls `GET /api/journeys`; the backend:
+   - Finds all direct routes connecting the two stops.
+   - For each matching route, fetches a road-following geometry from OSRM covering only the
+     ordered stops between origin and destination.
+   - Returns the journey list, ETAs, and a `routeGeometry` field per journey.
+5. The **frontend** draws a Leaflet polyline using the road-following coordinates.
+   GeoJSON coordinates (`[lon, lat]`) are flipped to Leaflet order (`[lat, lon]`) in the client.
+6. Live `locationUpdate` events arrive via Socket.IO and move bus markers — but only for routes
    returned by the last journey search.
+
+### Road routing services
+
+```
+backend/services/
+  road-routing-service.js   — calls OSRM, manages in-memory geometry cache
+  route-shape-service.js    — selects best geometry source (GTFS → OSRM → fallback)
+```
+
+`route-shape-service.js` uses the following priority:
+
+| Priority | Source | Status |
+|----------|--------|--------|
+| 1 | Official GTFS `shapes.txt` | Placeholder — returns null until real data is integrated |
+| 2 | OSRM road geometry | Active — fetched from `OSRM_BASE_URL` and cached in memory |
+| 3 | Stop-connection fallback | Used when OSRM is unreachable; straight lines between stops |
+
+> **Important limitation**: OSRM generates a *driving* route through the stop coordinates.
+> This is a road-network approximation and is **not** the official bus route alignment.
+> The generated shape is labelled internally as "Road-network demonstration route" and
+> `isOfficial: false` in the API response.
+
+#### Replacing generated road routing with official GTFS data
+
+When official `shapes.txt` data becomes available for MTC (Chennai), BEST (Mumbai), or
+DTC/DIMTS (Delhi), implement the `getGtfsShape()` function in
+`backend/services/route-shape-service.js`.  That function should:
+
+1. Resolve the `shape_id` for the given `routeId` from the GTFS feed.
+2. Clip the shape to the `fromStopId` → `toStopId` segment.
+3. Return a GeoJSON `LineString` geometry with `distanceMeters` and `durationSeconds`.
+
+Once `getGtfsShape()` returns a non-null result it automatically takes priority over the OSRM
+path.  No other changes are needed.
+
+Official GTFS feeds for Indian cities:
+- MTC Chennai: https://data.open-transit.in/ (check current availability)
+- BEST Mumbai:  BEST Undertaking open data portal
+- DTC Delhi:    data.gov.in
 
 ---
 
@@ -97,8 +143,11 @@ Browser  --GET /api/journeys-->  Express backend
 │   └── delhi-routes.json        # 5 forward Delhi routes
 ├── backend/
 │   ├── server.js                # Express + Socket.IO server; serves frontend/
+│   ├── services/
+│   │   ├── road-routing-service.js  # OSRM client + in-memory geometry cache
+│   │   └── route-shape-service.js   # Geometry source selector (GTFS → OSRM → fallback)
 │   ├── package.json
-│   └── .env.example
+│   └── .env.example             # ROAD_ROUTING_PROVIDER, OSRM_BASE_URL, OSRM_TIMEOUT_MS
 ├── frontend/
 │   ├── index.html               # Journey-search UI (city tabs, comboboxes, results)
 │   ├── css/

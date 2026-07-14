@@ -226,6 +226,15 @@ async function loadStops(cityId) {
     const res = await fetch(`${BACKEND_URL}/api/stops?cityId=${encodeURIComponent(cityId)}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const stops = await res.json();
+    if (stops.length === 0) {
+      console.warn('No stops returned for city:', cityId);
+      appState.availableStops = [];
+      fromCombobox.setOptions([]);
+      toCombobox.setOptions([]);
+      resultsPanel.innerHTML =
+        '<p class="empty-message" style="color:var(--danger)">No stops available for this city.</p>';
+      return;
+    }
     appState.availableStops = stops;
     fromCombobox.setOptions(stops);
     toCombobox.setOptions(stops);
@@ -234,6 +243,8 @@ async function loadStops(cityId) {
     appState.availableStops = [];
     fromCombobox.setOptions([]);
     toCombobox.setOptions([]);
+    resultsPanel.innerHTML =
+      `<p class="empty-message" style="color:var(--danger)">Unable to load stops (${err.message}). Check that the backend is running.</p>`;
   }
 }
 
@@ -395,16 +406,37 @@ function renderJourneyResults(data) {
 }
 
 function drawJourneyOnMap(data) {
+  // Clear any previous route layers before drawing the new search result.
+  // This prevents duplicate polylines after repeated searches.
   clearMapLayers();
+
+  const routingNoteEl = document.getElementById('road-routing-note');
+  if (routingNoteEl) routingNoteEl.classList.add('hidden');
 
   const { fromStop, toStop, journeys } = data;
   if (journeys.length === 0) return;
 
-  const bounds = L.latLngBounds();
+  const bounds    = L.latLngBounds();
+  let hasFallback = false;
 
   journeys.forEach(journey => {
-    const coords = journey.routeSegmentStops.map(s => [s.lat, s.lon]);
+    let coords;
+    const geo = journey.routeGeometry;
+
+    if (geo && Array.isArray(geo.coordinates) && geo.coordinates.length >= 2) {
+      if (geo.source === 'fallback') hasFallback = true;
+
+      // geo.coordinates is GeoJSON [longitude, latitude].
+      // Leaflet polyline expects [latitude, longitude] — flip each pair here.
+      coords = geo.coordinates.map(([lon, lat]) => [lat, lon]);
+    } else {
+      // No geometry returned from the backend — fall back to stop positions.
+      coords      = journey.routeSegmentStops.map(s => [s.lat, s.lon]);
+      hasFallback = true;
+    }
+
     if (coords.length >= 2) {
+      // Route line drawn below bus markers (bus markers are added later with addTo(map))
       const poly = L.polyline(coords, {
         color:   journey.color || '#6b7280',
         weight:  5,
@@ -415,7 +447,7 @@ function drawJourneyOnMap(data) {
     }
   });
 
-  // Origin marker — green circle
+  // Origin marker — green circle (drawn above route line)
   const fromM = L.circleMarker([fromStop.lat, fromStop.lon], {
     radius: 9, color: '#fff', weight: 2.5,
     fillColor: '#22c55e', fillOpacity: 1,
@@ -423,7 +455,7 @@ function drawJourneyOnMap(data) {
   appState.stopLayers.push(fromM);
   bounds.extend([fromStop.lat, fromStop.lon]);
 
-  // Destination marker — red circle
+  // Destination marker — red circle (drawn above route line)
   const toM = L.circleMarker([toStop.lat, toStop.lon], {
     radius: 9, color: '#fff', weight: 2.5,
     fillColor: '#ef4444', fillOpacity: 1,
@@ -432,6 +464,9 @@ function drawJourneyOnMap(data) {
   bounds.extend([toStop.lat, toStop.lon]);
 
   if (bounds.isValid()) map.fitBounds(bounds, { padding: [50, 50] });
+
+  // Show fallback note only when detailed road geometry was unavailable
+  if (routingNoteEl) routingNoteEl.classList.toggle('hidden', !hasFallback);
 }
 
 // ── Clear search ──────────────────────────────────────────────────────────────
